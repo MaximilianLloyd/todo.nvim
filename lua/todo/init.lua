@@ -14,32 +14,17 @@ local M = {}
 
 local function ensure_correct_config(config)
     local projects = config.projects
-    local mark_key = utils.project_key()
+    local key = utils.project_key()
 
-    if projects[mark_key] == nil then
-        projects[mark_key] = {
+    if projects[key] == nil then
+        projects[key] = {
 			todos = {}
         }
     end
 
-    -- local proj = projects[mark_key]
-    -- if proj.mark == nil then
-    --     proj.mark = { marks = {} }
-    -- end
-    --
-    -- local marks = proj.mark.marks
-    --
-    -- for idx, mark in pairs(marks) do
-    --     if type(mark) == "string" then
-    --         mark = { filename = mark }
-    --         marks[idx] = mark
-    --     end
-    --
-    --     marks[idx].filename = utils.normalize_path(mark.filename)
-    -- end
-
     return config
 end
+
 function M.setup(config)
 	if not config then
 		config = {}
@@ -94,7 +79,7 @@ function M.refresh_projects()
 end
 
 function M.get_todos_config()
-    return ensure_correct_config(TodoConfig).projects[utils.project_key()].todos
+    return ensure_correct_config(TodoConfig).projects[utils.project_key()]
 end
 
 function M.save()

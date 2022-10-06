@@ -13,7 +13,7 @@ function M.getCenterCol(width)
 end
 
 function M.set_buf_and_win_options(Harpoon_win_id, bufnr)
-    vim.api.nvim_win_set_option(Harpoon_win_id, "number", true)
+    vim.api.nvim_win_set_option(Harpoon_win_id, "number", false)
     vim.api.nvim_buf_set_name(bufnr, "todo-menu")
     vim.api.nvim_buf_set_option(bufnr, "filetype", "todo")
     vim.api.nvim_buf_set_option(bufnr, "buftype", "acwrite")

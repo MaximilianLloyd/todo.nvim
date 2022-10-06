@@ -1,4 +1,5 @@
 local popup = require("plenary.popup")
+local todo = require("todo.todo")
 local utils = require("todo.utils")
 
 local M = {}
@@ -46,19 +47,38 @@ function M.toggle_quick_menu()
 		return
 	end
 
-
 	local win_info = M.create_window()
 	-- Set global variables
 	Todo_win_id = win_info.win_id
 	Todo_bufh = win_info.bufnr
 
-	local contents = {  "First Todo", "Second Todo", "Thid Todo", }
+	local contents = {}
+	for k, v in pairs(TodoConfig.projects[utils.project_key()].todos) do
+		-- Insert date and todo
+		--
+		--#endregion
+		local len = string.len(k) + string.len(v.created)
+		local str = string.format("%s %s %s", k, string.rep(" ", config.width - len), v.created)
+		table.insert(contents, str)
+	end
 
 	utils.set_buf_and_win_options(Todo_win_id, Todo_bufh)
 	utils.set_buf_content(Todo_bufh, contents)
 	-- local global_nfig = harpoon.get_global_settings()
 end
 
+function M.prompt_input()
+	-- Get input from user
+	vim.ui.input({ prompt = "Enter todo: " }, function(input)
+		if input == nil or input == "" then
+			return
+		end
+		todo.add_todo(input)
+		M.toggle_quick_menu()
+	end)
+end
+
 vim.keymap.set("n", "<leader>td", M.toggle_quick_menu, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>at", M.prompt_input, { noremap = true, silent = true })
 
 return M

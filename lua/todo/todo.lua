@@ -1,10 +1,16 @@
-local todo = require("todo")
+local root = require("todo")
+local utils = require("todo.utils")
 
 local M = {}
 
 function M.add_todo(todoStr)
-  todo.get_todos_config().todos = table.insert(todo.get_todos_config().todos, 1, todoStr)
+  TodoConfig.projects[utils.project_key()].todos[todoStr] = {
+		done = false,
+		created = os.date("%c"),
+		updated = os.date("%c"),
+	}
+  root.save()
 end
 
-return M 
+return M
 
